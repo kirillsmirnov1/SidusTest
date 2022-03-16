@@ -4,15 +4,16 @@ namespace SidusTest.Control
 {
     public class CubeActive : MonoBehaviour
     {
-        [SerializeField] private float movementSpeed = 100;
-        [SerializeField] private float rotationSpeed = 100;
-        
+        [SerializeField] private float speed = 5;
+
         private Vector3 _defaultPos;
-        private Vector3 _targetPos;
 
         private Quaternion _defaultRotation;
         private Quaternion _targetRotation;
-        
+        private Quaternion _lastRotation;
+
+        private float _t = 1f;
+
         private void Awake()
         {
             InitFields();
@@ -31,13 +32,17 @@ namespace SidusTest.Control
         private void InitFields()
         {
             _defaultRotation = _targetRotation = transform.rotation;
-            _defaultPos = _targetPos = transform.position;
+            _defaultPos = transform.position;
         }
 
         private void SetTarget(Vector3 targetPos, Quaternion targetRotation)
         {
-            _targetPos = targetPos;
+            _lastRotation = transform.rotation;
             _targetRotation = targetRotation;
+
+            Path.PreparePath(transform.position, targetPos);
+            
+            _t = 0f;
         }
 
         private void HandleInput()
@@ -50,16 +55,12 @@ namespace SidusTest.Control
 
         private void Move()
         {
-            if (Vector3.Distance(transform.position, _targetPos) > float.Epsilon)
-            {
-                transform.position = Vector3.Lerp(transform.position, _targetPos, movementSpeed * Time.deltaTime);
-            }
+            if(_t >= 1f) return;
+            
+            _t = Mathf.Clamp01(_t + speed * Time.deltaTime);
 
-            if (Quaternion.Angle(transform.rotation, _targetRotation) > float.Epsilon)
-            {
-                transform.rotation =
-                    Quaternion.Slerp(transform.rotation, _targetRotation, rotationSpeed * Time.deltaTime);
-            }
+            transform.position = Path.PositionAt(_t);
+            transform.rotation = Quaternion.Slerp(_lastRotation, _targetRotation, _t);
         }
     }
 }
