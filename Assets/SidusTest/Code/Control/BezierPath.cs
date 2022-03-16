@@ -4,13 +4,13 @@ using Random = UnityEngine.Random;
 
 namespace SidusTest.Control
 {
-    public class Path : MonoBehaviour
+    public class BezierPath : MonoBehaviour
     {
         [SerializeField] private Vector2 bezierRadius = new Vector2(1, 3);
 
         private readonly Vector3[] _bezierPoints = new Vector3[4];
 
-        private static Path _instance;
+        private static BezierPath _instance;
 
         private void Awake()
         {

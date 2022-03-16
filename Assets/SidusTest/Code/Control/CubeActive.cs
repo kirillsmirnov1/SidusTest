@@ -50,7 +50,7 @@ namespace SidusTest.Control
             _lastRotation = transform.rotation;
             _targetRotation = targetRotation;
 
-            Path.PreparePath(transform.position, targetPos);
+            BezierPath.PreparePath(transform.position, targetPos);
             
             _t = 0f;
         }
@@ -74,7 +74,7 @@ namespace SidusTest.Control
             
             _t = Mathf.Clamp01(_t + speed * Time.deltaTime);
 
-            transform.position = Path.PositionAt(_t);
+            transform.position = BezierPath.PositionAt(_t);
             transform.rotation = Quaternion.Slerp(_lastRotation, _targetRotation, _t);
         }
 
