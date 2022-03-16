@@ -1,12 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace SidusTest.Control
 {
     public class CubePassive : MonoBehaviour
     {
-        private void OnMouseDown()
-        {
-            Debug.Log($"{gameObject.name} got clicked");
-        }
+        public static event Action<Vector3, Quaternion> OnClick; 
+        
+        private void OnMouseDown() 
+            => OnClick?.Invoke(transform.position, transform.rotation);
     }
 }
