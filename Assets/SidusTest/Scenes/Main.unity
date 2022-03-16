@@ -206,9 +206,9 @@ MonoBehaviour:
   waypoints:
   - {fileID: 413512584}
   - {fileID: 972884118}
+  - {fileID: 651562414}
   - {fileID: 259233392}
   - {fileID: 1981816504}
-  - {fileID: 651562414}
   - {fileID: 2084494909}
 --- !u!1001 &259233391
 PrefabInstance:
@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c8a5da1e5cfa2d4bb23dd2c2460c7d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bezierRadius: {x: 1, y: 2}
+  bezierRadius: {x: 2, y: 3}
 --- !u!1001 &413512583
 PrefabInstance:
   m_ObjectHideFlags: 0
