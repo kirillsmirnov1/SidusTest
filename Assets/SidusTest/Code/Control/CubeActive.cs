@@ -8,6 +8,8 @@ namespace SidusTest.Control
 
         private Vector3 _defaultPos;
 
+        private Transform _target;
+        
         private Quaternion _defaultRotation;
         private Quaternion _targetRotation;
         private Quaternion _lastRotation;
@@ -31,11 +33,19 @@ namespace SidusTest.Control
 
         private void InitFields()
         {
+            _target = transform;
             _defaultRotation = _targetRotation = transform.rotation;
             _defaultPos = transform.position;
         }
 
-        private void SetTarget(Vector3 targetPos, Quaternion targetRotation)
+        private void SetTarget(Transform target)
+        {
+            _target = target;
+            var nextWaypoint = Waypoints.NextWaypoint(transform.position, _target);
+            SetWaypoint(nextWaypoint.position, nextWaypoint.rotation);
+        }
+        
+        private void SetWaypoint(Vector3 targetPos, Quaternion targetRotation)
         {
             _lastRotation = transform.rotation;
             _targetRotation = targetRotation;
@@ -49,18 +59,26 @@ namespace SidusTest.Control
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SetTarget(_defaultPos, _defaultRotation);
+                _target = transform;
+                SetWaypoint(_defaultPos, _defaultRotation);
             }
         }
 
         private void Move()
         {
-            if(_t >= 1f) return;
+            if (_t >= 1f)
+            {
+                if(ReachedTarget()) return;
+                SetTarget(_target);
+            }
             
             _t = Mathf.Clamp01(_t + speed * Time.deltaTime);
 
             transform.position = Path.PositionAt(_t);
             transform.rotation = Quaternion.Slerp(_lastRotation, _targetRotation, _t);
         }
+
+        private bool ReachedTarget() 
+            => Vector3.Distance(transform.position, _target.position) < float.Epsilon;
     }
 }
