@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SidusTest.Control
@@ -55,13 +56,23 @@ namespace SidusTest.Control
             _t = 0f;
         }
 
+        private void OnMouseDown()
+        {
+            ReturnHome();
+        }
+
         private void HandleInput()
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                _target = transform;
-                SetWaypoint(_defaultPos, _defaultRotation);
+                ReturnHome();
             }
+        }
+
+        private void ReturnHome()
+        {
+            _target = transform;
+            SetWaypoint(_defaultPos, _defaultRotation);
         }
 
         private void Move()
