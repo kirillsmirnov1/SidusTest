@@ -26,21 +26,29 @@ namespace SidusTest.Control
         public static Transform NextWaypoint(Vector3 from, Transform to)
             => _instance.NextWaypointImpl(from, to);
 
-        private Transform NextWaypointImpl(Vector3 from, Transform to)
+        private Transform NextWaypointImpl(Vector3 from, Transform target)
         {
-            var direction = (to.position - from).normalized;
-            var nearestPoints = waypoints
-                .OrderBy(p => Vector3.Distance(from, p.position));
+            var targetPos = target.position;
+            var direction = (targetPos - from).normalized;
+            var minDistance = Vector3.Distance(from, targetPos);
             
-            foreach (var nearestPoint in nearestPoints)
+            for (int i = 0; i < waypoints.Length; i++)
             {
-                var waypoint = nearestPoint.position;
-                var dirToWaypoint = (waypoint - from).normalized;
-                if(TooClose(@from, waypoint) || NotAligned(dirToWaypoint, direction)) continue;
-                return nearestPoint;
+                var waypoint = waypoints[i];
+                var waypointPos = waypoint.position;
+                var toWaypoint = waypointPos - from;
+                var dirToWaypoint = toWaypoint.normalized;
+                
+                if(TooClose(from, waypointPos) || NotAligned(dirToWaypoint, direction)) continue;
+                
+                var distToWaypoint = toWaypoint.magnitude;
+                if(distToWaypoint > minDistance) continue;
+
+                minDistance = distToWaypoint;
+                target = waypoint;
             }
 
-            return to;
+            return target;
         }
 
         private static bool NotAligned(Vector3 dirToWaypoint, Vector3 direction) 
