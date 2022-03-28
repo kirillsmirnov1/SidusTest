@@ -1,4 +1,6 @@
-This is the test task for Sidius.
+Test task for Sidius.
+
+![](https://raw.githubusercontent.com/kirillsmirnov1/dump/main/sidustest.gif)
 
 [WebGl build](https://kiirusha95.itch.io/sidustest)
 
